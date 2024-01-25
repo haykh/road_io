@@ -1,17 +1,27 @@
-import Simulation from './components/car'
+import Highway from './components/car'
 
 export const mySketch = (p) => {
-  let sim;
+  let hway;
   p.setup = () => {
     p.createCanvas(window.innerWidth, window.innerHeight);
-    sim = new Simulation(3, p.width / 2, 0.9 * p.height);
+    hway = new Highway(3, p.width / 2, 0.9 * p.height);
     p.frameRate(60);
   }
 
   p.draw = () => {
     p.background("#2f2f2f");
-    sim.run(p, 1.0 / p.frameRate(), 1.0);
-    sim.draw(p);
+    hway.run(p, 5.0 / p.frameRate(), 1.0);
+    hway.draw(p);
+    p.push();
+    {
+      p.textSize(30);
+      p.fill(255);
+      p.text("time: " + hway.time.toFixed(1), 10, 30);
+      hway.lanes.forEach((lane, i) => {
+        p.text("lane " + (i + 1) + ": " + lane.passed + " : " + (lane.passed / hway.time).toFixed(2), 10, 30 * (i + 2));
+      });
+    }
+    p.pop();
   }
 
   p.windowResized = () => {
